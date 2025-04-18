@@ -1,0 +1,86 @@
+#include
+#include
+using namespace std;
+
+char current_player = 'X';
+vector<vector> board(3, vector(3, ' '));
+
+void display() {
+cout << "Tic Tac Toe Board:\n";
+for (int i = 0; i < 3; i++) {
+for (int j = 0; j < 3; j++) {
+cout << board[i][j];
+if (j < 2) {
+cout << " | ";
+}
+}
+cout << endl;
+if (i < 2) {
+cout << "--+---+--\n";
+}
+}
+cout << endl;
+}
+
+bool checkwin() {
+for (int i = 0; i < 3; i++) {
+if ((board[i][0] == current_player && board[i][1] == current_player && board[i][2] == current_player) ||
+(board[0][i] == current_player && board[1][i] == current_player && board[2][i] == current_player)) {
+return true;
+}
+}
+if ((board[0][0] == current_player && board[1][1] == current_player && board[2][2] == current_player) ||
+(board[0][2] == current_player && board[1][1] == current_player && board[2][0] == current_player)) {
+return true;
+}
+return false;
+}
+
+bool isboardfull() {
+for (int i = 0; i < 3; i++) {
+for (int j = 0; j < 3; j++) {
+if (board[i][j] == ' ') {
+return false;
+}
+}
+}
+return true;
+}
+
+void switchplayer() {
+current_player = (current_player == 'X') ? 'O' : 'X';
+}
+
+void playgame() {
+int move;
+bool gameover = false;
+while (!gameover) {
+display();
+cout << "PLAYER " << current_player << ", enter your move (1-9): ";
+cin >> move;
+
+    if (move >= 1 && move <= 9) {
+        int row = (move - 1) / 3;
+        int col = (move - 1) % 3;
+
+        if (board[row][col] == ' ') {
+            board[row][col] = current_player; // Use assignment operator '=' instead of '=='
+
+            if (checkwin()) {
+                display();
+                cout << "PLAYER " << current_player << " wins!" << endl;
+                gameover = true;
+            } else if (isboardfull()) {
+                display();
+                cout << "It's a tie!" << endl;
+                gameover = true;
+            } else {
+                switchplayer();
+            }
+        } else {
+            cout << "Cell already taken, try again.\n";
+        }
+    } else {
+        cout << "Invalid move. Enter a number between 1 and 9.\n";
+    }
+}
